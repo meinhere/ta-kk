@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Flowbite -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+    <title>Random Forest Method - Tuberculosis</title>
+  </head>
+  <body>
+    <div class="container mx-4 sm:mx-auto py-6 max-w-3xl">
+      <!-- Header -->
+      <h1 class="text-3xl font-bold uppercase text-center mb-5">
+        Prediksi Lokasi Anatomi Tuberculosis pasien
+      </h1>
+
+      {% if label_class %}
+      <div
+        id="alert-1"
+        class="flex items-center p-4 mb-4 rounded-lg {{ style_class[0] }}"
+        role="alert"
+      >
+        <svg
+          class="flex-shrink-0 w-4 h-4"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+          />
+        </svg>
+        <span class="sr-only">Info</span>
+        <div class="ms-3 text-sm font-medium">
+          Hasil prediksi menyatakan pasien mengalami kemungkinan penyakit TBC
+          pada
+          <b class="">Lokasi {{ label_class }}</b>
+        </div>
+        <button
+          type="button"
+          class="ms-auto -mx-1.5 -my-1.5 {{ style_class[1] }} rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 inline-flex items-center justify-center h-8 w-8"
+          data-dismiss-target="#alert-1"
+          aria-label="Close"
+        >
+          <span class="sr-only">Close</span>
+          <svg
+            class="w-3 h-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+        </button>
+      </div>
+      {% endif %}
+
+      <!-- Form -->
+      <form action="/predict" method="post" class="max-w-xl mx-auto">
+        <div class="flex gap-6 mb-3">
+          <!-- Form Input -->
+          <div id="neuro-input" class="basis-full">
+            <!-- Jenis Kelamin -->
+            <div class="mb-2">
+              <label
+                for="jenis_kelamin"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Jenis Kelamin</label
+              >
+              <select
+                id="jenis_kelamin"
+                name="jenis_kelamin"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="P">Perempuan</option>
+                <option value="L">Laki-Laki</option>
+              </select>
+            </div>
+
+            <!-- Foto Toraks -->
+            <div class="mb-2">
+              <label
+                for="foto_toraks"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Foto Toraks</label
+              >
+              <select
+                id="foto_toraks"
+                name="foto_toraks"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="Positif">Positif</option>
+                <option value="Negatif">Negatif</option>
+              </select>
+            </div>
+
+            <!-- Status HIV -->
+            <div class="mb-2">
+              <label
+                for="status_hiv"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Status HIV</label
+              >
+              <select
+                id="status_hiv"
+                name="status_hiv"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="Negatif">Negatif</option>
+                <option value="Positif">Positif</option>
+              </select>
+            </div>
+
+            <!-- Riwayat Diabetes -->
+            <div class="mb-2">
+              <label
+                for="riwayat_diabetes"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Riwayat Diabetes</label
+              >
+              <select
+                id="riwayat_diabetes"
+                name="riwayat_diabetes"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="Tidak">Tidak</option>
+                <option value="Ya">Ya</option>
+              </select>
+            </div>
+
+            <!-- Hasil TCM -->
+            <div class="mb-2">
+              <label
+                for="hasil_tcm"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Hasil TCM</label
+              >
+              <select
+                id="hasil_tcm"
+                name="hasil_tcm"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="Rif Sensitif">Rif Sensitif</option>
+                <option value="Negatif">Negatif</option>
+                <option value="Rif resisten">Rif resisten</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button Submit -->
+        <button
+          type="submit"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  </body>
+</html>
