@@ -104,8 +104,17 @@ def show_preprocessing():
     st.write("Data yang tersedia:")
     st.write(df.head())
 
-    # --------------- Pengisian Data -----------------
-    st.write("### Pengisian Data")
+    # --------------- Penghapusan Data Duplicate -----------------
+    st.write("### Penghapusan Data Duplicate")
+
+    df = df.drop_duplicates()
+    duplicate = df.duplicated().sum()
+
+    st.write("\nData Duplicate:")
+    st.write(duplicate)
+
+    # --------------- Pengisian Data Missing Value -----------------
+    st.write("### Pengisian Data Missing Value")
 
     # Tampilkan hasil
     st.write("Mengisi nilai yang hilang")
